@@ -1,0 +1,212 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ post.titulo }} | Aldea Latina</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+        }
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+        }
+        .logo {
+            height: 140px;
+            position: absolute;
+            top: 10px;
+            left: 20px;
+        }
+        nav {
+            background-color: #34495e;
+            padding: 0.5rem 2rem;
+            position: relative;
+        }
+        .nav-links {
+            text-align: center;
+        }
+        .nav-links a {
+            color: white;
+            margin: 0 0.8rem;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+        .user-bar {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: white;
+            font-size: 0.85rem;
+        }
+        .user-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .user-email {
+            font-size: 0.75rem;
+            opacity: 0.8;
+        }
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            object-fit: cover;
+            background-color: #fff;
+        }
+        .logout-link {
+            color: white;
+            text-decoration: none;
+            background-color: #e74c3c;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            border: none;
+        }
+        .logout-link:hover {
+            background-color: #c0392b;
+        }
+        .container {
+            max-width: 800px;
+            margin: 2rem auto 4rem auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            margin: 0 0 0.3rem 0;
+            font-size: 2rem;
+        }
+        h3 {
+            margin: 0 0 1.5rem 0;
+            font-weight: normal;
+            color: #555;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 1.5rem;
+            border-radius: 6px;
+        }
+        .volver, .borrar {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+        .volver {
+            background-color: #2980b9;
+            color: white;
+        }
+        .volver:hover {
+            background-color: #1c5980;
+        }
+        .borrar {
+            background-color: #c0392b;
+            color: white;
+            margin-left: 1rem;
+            border: none;
+            cursor: pointer;
+        }
+        .borrar:hover {
+            background-color: #922b21;
+        }
+        /* Para que el link del usuario no cambie layout ni color */
+        .user-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: white;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="{% static 'img/logo.png' %}" alt="Logo Aldea Latina" class="logo">
+        <div>
+            <h1>Aldea Latina</h1>
+            <p>La voz informativa de Latinoamérica, unida en una sola aldea.</p>
+        </div>
+    </header>
+
+    <nav>
+        <div class="nav-links">
+            <a href="{% url 'inicio' %}">Inicio</a>
+            <a href="#">Nacionales</a>
+            <a href="#">Internacionales</a>
+            <a href="#">Economía</a>
+            <a href="#">Deportes</a>
+            <a href="#">Tecnología</a>
+
+            {% if user.is_authenticated %}
+                <a href="{% url 'formulario' %}">Publicar</a>
+            {% endif %}
+
+            {% if not user.is_authenticated %}
+                <a href="{% url 'login' %}">Iniciar sesión</a>
+            {% endif %}
+        </div>
+
+        {% if user.is_authenticated %}
+        <div class="user-bar">
+            <a href="{% url 'editar_perfil' %}" class="user-link">
+                {% if user.perfil.foto %}
+                    <img src="{{ user.perfil.foto.url }}" alt="Perfil" class="user-avatar">
+                {% else %}
+                    <img src="{% static 'img/perfil.png' %}" alt="Perfil" class="user-avatar">
+                {% endif %}
+                <div class="user-info">
+                    <span>{{ user.username }}</span>
+                    <span class="user-email">{{ user.email }}</span>
+                </div>
+            </a>
+            <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="logout-link">Salir</button>
+            </form>
+        </div>
+        {% endif %}
+    </nav>
+
+    <div class="container">
+        <h1>{{ post.titulo }}</h1>
+        <h3>{{ post.subtitulo }}</h3>
+
+        {% if post.imagen_portada %}
+            <img src="{{ post.imagen_portada.url }}" alt="Imagen de {{ post.titulo }}">
+        {% else %}
+            <p><em>No hay imagen disponible</em></p>
+        {% endif %}
+
+        <div>{{ post.Noticia|safe }}</div>
+
+        <a href="{% url 'inicio' %}" class="volver">← Volver al inicio</a>
+
+        {% if user.is_authenticated and user == post.autor %}
+            <form method="POST" action="{% url 'borrarpost' post.id %}" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="borrar" onclick="return confirm('¿Estás seguro de que deseas borrar esta publicación?');">🗑 Borrar</button>
+            </form>
+        {% endif %}
+    </div>
+</body>
+</html>

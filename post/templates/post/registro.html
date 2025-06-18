@@ -1,0 +1,102 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Registro de Usuario</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .login-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 300px;
+            margin: 50px auto;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            border: none;
+            color: white;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .errorlist {
+            color: red;
+            margin: 0 0 10px 0;
+            padding: 0;
+            list-style: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Registro de Usuario</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ formulario.non_field_errors }}
+
+            <label for="id_username">Usuario</label>
+            {{ formulario.username.errors }}
+            {{ formulario.username }}
+
+            <label for="id_email">Correo electrónico</label>
+            {{ formulario.email.errors }}
+            {{ formulario.email }}
+
+            <label for="id_first_name">Nombre</label>
+            {{ formulario.first_name.errors }}
+            {{ formulario.first_name }}
+
+            <label for="id_last_name">Apellido</label>
+            {{ formulario.last_name.errors }}
+            {{ formulario.last_name }}
+
+            <label for="id_password1">Contraseña</label>
+            {{ formulario.password1.errors }}
+            {{ formulario.password1 }}
+
+            <label for="id_password2">Confirmar contraseña</label>
+            {{ formulario.password2.errors }}
+            {{ formulario.password2 }}
+
+            <button type="submit">Registrarse</button>
+        </form>
+    </div>
+</body>
+</html>

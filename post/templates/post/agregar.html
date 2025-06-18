@@ -1,0 +1,125 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Aldea Latina - Nuevo Post</title>
+
+    {{ form.media }}  {# Esto carga los JS y CSS que TinyMCE necesita #}
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+        }
+        .logo {
+            height: 140px;
+            position: absolute;
+            top: 10px;
+            left: 20px;
+        }
+        nav {
+            background-color: #34495e;
+            padding: 0.5rem 2rem;
+            text-align: center;
+        }
+        nav a {
+            color: white;
+            margin-right: 1rem;
+            text-decoration: none;
+        }
+        .form-container {
+            max-width: 600px;
+            background-color: white;
+            margin: 2rem auto;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .form-container h2 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        input[type="text"],
+        textarea,
+        input[type="file"] {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #2980b9;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #1c5980;
+        }
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="{% static 'img/logo.png' %}" alt="Logo Aldea Latina" class="logo" />
+        <div>
+            <h1>Aldea Latina</h1>
+            <p>La voz informativa de Latinoamérica, unida en una sola aldea.</p>
+        </div>
+    </header>
+
+    <nav>
+        <a href="#">Inicio</a>
+        <a href="#">Nacionales</a>
+        <a href="#">Internacionales</a>
+        <a href="#">Economía</a>
+        <a href="#">Deportes</a>
+        <a href="#">Tecnología</a>
+    </nav>
+
+    <div class="form-container">
+        <h2>Crear Nueva Noticia</h2>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Publicar Noticia</button>
+        </form>
+    </div>
+
+    <footer>
+        &copy; 2025 Aldea Latina. Todos los derechos reservados.
+    </footer>
+</body>
+</html>
+
